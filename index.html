@@ -1,0 +1,95 @@
+<div style="font-family: 'Helvetica Neue', sans-serif; 
+            background:#111; 
+            color:#eee; 
+            padding:40px; 
+            border-radius:8px;
+            max-width:800px; 
+            margin:auto;">
+
+<h2 style="letter-spacing:2px; font-weight:300;">
+SCENPRODUKTION – KLIMATPÅVERKAN
+</h2>
+
+<p style="font-size:14px; opacity:0.7;">
+Ett verktyg för att synliggöra materialval inom kostym, scenografi och mask.
+</p>
+
+<hr style="border:0.5px solid #333; margin:30px 0;">
+
+<h3>KOSTYM</h3>
+
+<select id="costumeMaterial" style="width:100%; padding:8px; margin-bottom:10px;">
+  <option value="6">Bomull</option>
+  <option value="9">Polyester</option>
+  <option value="25">Ull</option>
+  <option value="15">Silke</option>
+  <option value="1">Återbruk</option>
+</select>
+
+<input type="number" id="costumeWeight" placeholder="Vikt (kg)" 
+style="width:100%; padding:8px; margin-bottom:10px;">
+
+<select id="transport" style="width:100%; padding:8px; margin-bottom:20px;">
+  <option value="0.1">Lokal transport</option>
+  <option value="0.5">Europeisk transport</option>
+  <option value="1.5">Interkontinental transport</option>
+</select>
+
+<h3>SCENOGRAFI</h3>
+
+<input type="number" id="wood" placeholder="Trä (kg)" style="width:100%; padding:8px; margin-bottom:10px;">
+<input type="number" id="mdf" placeholder="MDF/Plywood (kg)" style="width:100%; padding:8px; margin-bottom:10px;">
+<input type="number" id="metal" placeholder="Metall (kg)" style="width:100%; padding:8px; margin-bottom:10px;">
+<input type="number" id="paint" placeholder="Färg (liter)" style="width:100%; padding:8px; margin-bottom:10px;">
+
+<select id="reuse" style="width:100%; padding:8px; margin-bottom:20px;">
+  <option value="1">Materialet återbrukas ej</option>
+  <option value="0.6">Materialet återbrukas</option>
+</select>
+
+<h3>MASK</h3>
+
+<input type="number" id="prosthetic" placeholder="Protesmaterial (kg)" style="width:100%; padding:8px; margin-bottom:10px;">
+<input type="number" id="electricity" placeholder="Elanvändning (kWh)" style="width:100%; padding:8px; margin-bottom:20px;">
+
+<button onclick="calculate()" 
+style="background:#eee; color:#111; padding:12px 25px; 
+border:none; cursor:pointer; letter-spacing:1px;">
+BERÄKNA
+</button>
+
+<h2 id="result" style="margin-top:30px; font-weight:300;"></h2>
+
+<p style="font-size:12px; opacity:0.5; margin-top:30px;">
+Beräkningen är en uppskattning baserad på europeiska genomsnittsvärden.
+</p>
+
+</div>
+
+<script>
+function calculate() {
+
+let costumeMaterial = parseFloat(document.getElementById("costumeMaterial").value) || 0;
+let costumeWeight = parseFloat(document.getElementById("costumeWeight").value) || 0;
+let transport = parseFloat(document.getElementById("transport").value) || 0;
+
+let wood = (parseFloat(document.getElementById("wood").value) || 0) * 1;
+let mdf = (parseFloat(document.getElementById("mdf").value) || 0) * 2;
+let metal = (parseFloat(document.getElementById("metal").value) || 0) * 2.2;
+let paint = (parseFloat(document.getElementById("paint").value) || 0) * 5;
+
+let reuseFactor = parseFloat(document.getElementById("reuse").value) || 1;
+
+let prosthetic = (parseFloat(document.getElementById("prosthetic").value) || 0) * 12;
+let electricity = (parseFloat(document.getElementById("electricity").value) || 0) * 0.05;
+
+let costumeEmission = (costumeMaterial * costumeWeight) + (transport * costumeWeight);
+let scenographyEmission = (wood + mdf + metal + paint) * reuseFactor;
+let maskEmission = prosthetic + electricity;
+
+let total = costumeEmission + scenographyEmission + maskEmission;
+
+document.getElementById("result").innerHTML =
+"TOTAL KLIMATPÅVERKAN: " + total.toFixed(1) + " kg CO₂e";
+}
+</script>
